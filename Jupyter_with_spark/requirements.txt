@@ -1,0 +1,3 @@
+pyspark
+graphdatascience[ogb]
+graphdatascience[networkx]

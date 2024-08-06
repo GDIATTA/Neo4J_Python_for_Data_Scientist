@@ -1,0 +1,42 @@
+version: '3'
+
+services:
+
+  pyspark-jupyter:
+    build: Jupyter_with_spark/.
+    user: root
+    container_name: pyspark-jupyter-lab
+    ports:
+      - 8888:8888
+      - 4040:4040
+    networks:
+      - confluent
+    environment:
+      JUPYTER_PORT: 8888
+      SPARK_UI_PORT: 4040
+      GRANT_SUDO: yes
+    volumes:
+      - C:\Users\Lenovo\OneDrive\Documents1\Neo4J\Neo4J_for_Data_Science\spark_neo4j:/home/jovyan/
+
+  neo4j:
+    container_name: neo4j
+    image: neo4j:latest
+    ports:
+      - 7474:7474
+      - 7687:7687
+    networks:
+      - confluent
+    environment:
+      - NEO4J_apoc_export_file_enabled=true
+      - NEO4J_apoc_import_file_enabled=true
+      - NEO4J_apoc_import_file_use__neo4j__config=true
+      - NEO4J_PLUGINS=["apoc", "graph-data-science"]
+    volumes:
+      - ./neo4j_db/data:/data
+      - ./neo4j_db/logs:/logs
+      - ./neo4j_db/import:/var/lib/neo4j/import
+      - ./neo4j_db/plugins:/plugins
+
+networks:
+  confluent:
+
